@@ -1,0 +1,59 @@
+{
+    "configurations": [
+        {
+            "type": "python",
+            "name": "[Python]Electrocardiograms Data Analysis",
+            "file": "Python/features/electrocardiograms_data_analysis/main.py"
+        },
+        {
+            "type": "python",
+            "name": "[Python]Supermarket Data Generation",
+            "file": "Python/features/supermarket_data_generation/generate_data.py"
+        },
+        {
+            "type": "python",
+            "name": "[Python]Water Tracker Analysis",
+            "file": "Python/features/water_tracker_analysis/main.py"
+        },
+        {
+            "type": "python",
+            "name": "[Python]思政练习题目答案",
+            "file": "Resources/answer_resolver.py"
+        },
+        {
+            "type": "python",
+            "name": "[Python]Markdown format to Docx",
+            "file": "Python/features/docx_writer/main.py"
+        },
+        {
+            "type": "command",
+            "name": "[Java]Progressc Line Output Application",
+            "program": "$WORKSPACE_DIR$/.build.java.progress_line_output_application.sh"
+        },
+        {
+            "type": "command",
+            "name": "[Swift]Rep Super Market",
+            "program": "$WORKSPACE_DIR$/.build.swift.run_rep_super_market.sh"
+        },
+        {
+            "type": "gradle",
+            "name": "[Gradle]Run MainKt",
+            "tasks": ["run"],
+            "workingDir": "Kotlin/"
+        },
+        {
+            "type": "node",
+            "name": "[Node.js]Node App Server",
+            "file": "server.js",
+            "workingDir": "Javascript/node/"
+        },
+        {
+            "type": "node",
+            "name": "[Node.js]Node App CommandLine",
+            "file": "server.js",
+            "workingDir": "Javascript/node/",
+            "appOptions": ["1", "2", "3", "4", "5"]
+        },
+    ],
+    "name": "Playground"
+}

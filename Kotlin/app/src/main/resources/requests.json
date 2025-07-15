@@ -1,0 +1,54 @@
+[
+    {
+        "label": "Formula 1 Driver(Mar Verstappen) information",
+        "method": "GET",
+        "mode": {
+            "group": "text",
+            "type": "json"
+        },
+        "url": "https://api.openf1.org/v1/drivers",
+        "queryParameters": {
+            "driver_number": "1"
+        }
+    },
+    {
+        "label": "Modifier Lepps user avatar",
+        "method": "GET",
+        "mode": {
+            "group": "binary",
+            "type": "jpeg"
+        },
+        "url": "http://localhost/api/media/images/{id}",
+        "pathParameters": {
+            "id": "5afc709b-b114-4038-af50-45ae8aa2ceb7"
+        }
+    },
+    {
+        "label": "Modifier Lepps user avatar",
+        "method": "POST",
+        "mode": {
+            "group": "text",
+            "type": "json"
+        },
+        "url": "https://api.lepps.com/condition/profile/{userId}/modifier/avatar",
+        "pathParameters": {
+            "userId": "137429672834"
+        },
+        "queryParameters": {
+            "force": "true"
+        },
+        "authorization": {
+            "type": "Bearer",
+            "key": "EUVOIVuZhSqWD2YJ4E6H73cEY3JKaMcL78gjFoHbXwgfDx0XP3KhfbtbJSLa8Cht"
+        },
+        "headers": {
+            "X-Device-Identidier": "DesktopPPS.602eRD7c9dcgiooH5MDP0KLRaHrWQVXnGnVK"
+        },
+        "body": {
+            "contentType": "application/json",
+            "row": [
+                "/Users/a/Documents/.kn/conditions/avatar.png"
+            ]
+        }
+    }
+]

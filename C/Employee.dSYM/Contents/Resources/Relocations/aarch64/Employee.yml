@@ -1,0 +1,5 @@
+---
+triple:          'arm64-apple-darwin'
+binary-path:     '/Users/a/Desktop/Playground/C/Employee'
+relocations:     []
+...

@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chat Room</title>
+    <script src="tailwindcss.js"></script>
+    <style>
+        body {
+            font-family: 'Maple Mono', 'Courier New', Courier, monospace;
+        }
+    </style>
+</head>
+
+<body class="bg-gray-100 dark:bg-gray-900 min-h-screen flex items-center justify-center">
+    <div class="bg-white dark:bg-gray-800 p-8 rounded shadow-lg w-full max-w-md">
+        <h1 class="text-2xl font-bold mb-6 text-gray-800 dark:text-white">Chat Room</h1>
+        <div id="chatWindow"
+            class="h-64 overflow-y-auto border border-gray-300 dark:border-gray-700 p-4 mb-4 rounded bg-white dark:bg-gray-800 text-gray-800 dark:text-white">
+        </div>
+        <form id="messageForm" class="flex">
+            <input type="text" id="messageInput"
+                class="flex-grow p-2 border border-gray-300 dark:border-gray-700 rounded-l bg-white dark:bg-gray-800 text-gray-800 dark:text-white"
+                placeholder="Enter message...">
+            <button type="submit"
+                class="bg-blue-500 hover:bg-blue-600 dark:hover:bg-blue-600 text-white p-2 rounded-r">Send</button>
+        </form>
+    </div>
+
+    <script>
+        let userInfo = null;
+        let socket;
+        // Authenticate
+        async function authenticate() {
+            const username = prompt('Username:');
+            const password = prompt('Password:');
+
+            try {
+                const response = await fetch('https://localhost:4000/login', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        username, password
+                    })
+                });
+
+                const data = await response.json();
+                if (!data.token) {
+                    alert('Authenticate failed');
+                    return null;
+                }
+                const userInfo = await fetch('https://localhost:4000/info', {
+                    headers: {
+                        'Authorization': data.token
+                    }
+                })
+                const userData = await userInfo.json();
+                if (userData.token == data.token) {
+                    return userData;
+                }
+            } catch (error) {
+                console.error('Authorization failed:', error);
+                return null;
+            }
+        }
+
+        // Initialize WebSocket
+        async function initWebSocket() {
+            const user = await authenticate();
+            if (!user) return;
+            userInfo = user
+
+            socket = new WebSocket('/chat?authorization=' + user.token);
+
+            const chatWindow = document.getElementById('chatWindow');
+            const messageForm = document.getElementById('messageForm');
+            const messageInput = document.getElementById('messageInput');
+
+            socket.onmessage = (event) => {
+                const data = JSON.parse(event.data);
+                const messageElement = document.createElement('div');
+                messageElement.textContent = data.message;
+                chatWindow.appendChild(messageElement);
+                chatWindow.scrollTop = chatWindow.scrollHeight;
+            };
+        }
+
+        initWebSocket();
+
+        const messageForm = document.getElementById('messageForm');
+        const messageInput = document.getElementById('messageInput');
+
+        messageForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const message = messageInput.value;
+            if (message && socket && socket.readyState === WebSocket.OPEN) {
+                socket.send(JSON.stringify({
+                    id: userInfo.id,
+                    message
+                }));
+                messageInput.value = '';
+            }
+        });
+    </script>
+</body>
+
+</html>

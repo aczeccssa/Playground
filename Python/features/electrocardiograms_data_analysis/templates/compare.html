@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ECG数据比较分析</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .plot-container {
+            margin: 20px 0;
+            text-align: center;
+        }
+        .plot-image {
+            max-width: 100%;
+            height: auto;
+        }
+        .stats-container {
+            margin: 20px 0;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container mt-5">
+        <h1 class="text-center mb-4">ECG数据比较分析</h1>
+        
+        <div class="stats-container">
+            <h4>总体统计</h4>
+            <div class="row">
+                <div class="col-md-6">
+                    <p><strong>总记录数：</strong>{{ stats.total_records }}</p>
+                    <p><strong>记录时间范围：</strong>{{ stats.date_range.start }} 至 {{ stats.date_range.end }}</p>
+                </div>
+                <div class="col-md-6">
+                    <h5>预测分析</h5>
+                    {% if stats.prediction %}
+                    <p><strong>未来7天趋势：</strong>
+                        {% if stats.prediction.forecast[-1] > stats.prediction.historical[-1] %}
+                        <span class="text-danger">上升趋势</span>
+                        {% else %}
+                        <span class="text-success">下降趋势</span>
+                        {% endif %}
+                    </p>
+                    {% endif %}
+                    
+                    {% if stats.anomalies %}
+                    <h5>异常记录</h5>
+                    <ul>
+                        {% for anomaly in stats.anomalies %}
+                        <li>{{ anomaly.date }}: 心率{{ anomaly.metrics.mean_hr }}，需要关注</li>
+                        {% endfor %}
+                    </ul>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        
+        <div class="plot-container">
+            <img class="plot-image" src="data:image/png;base64,{{ plot }}" alt="比较分析图表">
+        </div>
+        
+        <div class="table-responsive mt-4">
+            <h4>详细记录</h4>
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>日期</th>
+                        <th>平均心率</th>
+                        <th>SDNN</th>
+                        <th>RMSSD</th>
+                        <th>pNN50</th>
+                        <th>健康评分</th>
+                        <th>异常警告</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for result in results %}
+                    <tr>
+                        <td>{{ result.record_date }}</td>
+                        <td>{{ "%.1f"|format(result.heart_rate_stats.mean_hr) }}</td>
+                        <td>{{ "%.1f"|format(result.hrv_metrics.sdnn) }}</td>
+                        <td>{{ "%.1f"|format(result.hrv_metrics.rmssd) }}</td>
+                        <td>{{ "%.1f"|format(result.hrv_metrics.pnn50) }}</td>
+                        <td>
+                            <span class="badge bg-{{ 'success' if result.health_evaluation.score >= 80 else 'warning' if result.health_evaluation.score >= 60 else 'danger' }}">
+                                {{ result.health_evaluation.score }}
+                            </span>
+                        </td>
+                        <td>
+                            {% if result.arrhythmia_warnings %}
+                            <ul class="list-unstyled mb-0">
+                                {% for warning in result.arrhythmia_warnings %}
+                                <li>{{ warning }}</li>
+                                {% endfor %}
+                            </ul>
+                            {% else %}
+                            无
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</body>
+</html> 

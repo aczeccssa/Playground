@@ -1,0 +1,156 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+        <meta http-equiv="X-UA-Compatible" content="ie=edge">
+        <link rel="stylesheet" href="all.css">
+        <link rel="stylesheet" href="optional.css">
+        <title>Document</title>
+    </head>
+    <body>
+        <div class="main" id="app">
+            <div class="wrap">
+                <aside class="left">
+                    <h4>名城诗词</h4>
+                    <ul>
+                        <!-- 华东地区, 华北地区, 华中地区, 华南地区, 华西地区 -->
+                        <li v-for="(name, index) in areaList"><a @click="handleArea(index)">{{name}}</a></li>
+                    </ul>
+                </aside>
+                <article class="right">
+                    <portry :cities="cityList"></portry>
+                </article>
+            </div>
+            <div class="clear"></div>
+        </div>
+
+        <template id="search">
+            <div class="content">
+                <ul>
+                    <li v-for="(city, index) in cities" :key="index" @click="handleVerse(city)">{{city}}</li>
+                </ul>
+            </div>
+            <div class="poetry">
+                <h4 v-if="result.length > 0">{{statistice}}</h4>
+                <dl v-for="(item, index) in result" :key="index">
+                    <dt>{{item.title}} {{item.author}}</dt>
+                    <dd v-for="(stat, statIndex) in item" :key="statIndex">{{stat.line}}</dd>
+                </dl>
+            </div>
+        </template>
+
+        <script src="../libs/vue.js"></script>
+        <script type="text/javascript">
+            const configSearch = {
+                template: "#search",
+                props: {
+                    cities: Array
+                },
+                data() {
+                    return {
+                        mockData: [
+                            {
+                                city: "杭州",
+                                title: "饮湖上初晴后雨二首·其二",
+                                author: "苏轼[宋]",
+                                verse: [
+                                    {line: "水光潋滟晴方好，山色空蒙雨亦奇。"},
+                                    {line: "欲把西湖比西子，淡妆浓抹总相宜。"}
+                                ]
+                            },
+                            {
+                                city: "济南",
+                                title: "济南二首",
+                                author: "顾炎武[清]",
+                                verse: [
+                                    {line: "落日天边见二峰，平临湖上出芙蓉。"},
+                                    {line: "西来水窦缘王屋，南去山根接岱宗。"}
+                                ]
+                            },
+                            {
+                                city: "杭州",
+                                title: "钱塘湖春行",
+                                author: "白居易[唐]",
+                                verse: [
+                                    {line: "孤山寺北贾亭西，水面初平云脚低。"},
+                                    {line: "几处早莺争暖树，谁家新燕啄春泥。"},
+                                    {line: "乱花渐欲迷人眼，浅草才能没马蹄。"},
+                                    {line: "最爱湖东行不足，绿杨阴里白沙堤。"}
+                                ]
+                            },
+                            {
+                                city: "广州",
+                                title: "送人游岭南",
+                                author: "司空曙[唐]",
+                                verse: [
+                                    {line: "万里南游客，交州见柳条。"},
+                                    {line: "逢迎人易合，时日酒能消。"},
+                                    {line: "浪晓浮青雀，风温解黑貂。"},
+                                    {line: "囊金如未足，莫恨故乡遥。"}]
+                            }
+                        ],
+                        cityName: "",
+                        cityInfo: [],
+                        result: [],
+                    }
+                },
+                computed: {
+                    statistice: function () {
+                        return `关于${this.cityName}的诗词共${this.result.length}篇`;
+                    }
+                },
+                watch: {
+                    cities: function (_newValue, _oldValue) {
+                        this.result.splice(0, this.result.length);
+                    }
+                },
+                methods: {
+                    handleVerse: function (name) {
+                        this.cityName = name;
+                        this.result = this.cityInfo.filter((item) => item.city === name);
+                    },
+                    getDataList: function () {
+                        setTimeout(() => {
+                            this.cityInfo = this.mockData
+                        }, 200);
+                    }
+                },
+                mounted() {
+                    this.getDataList()
+                }
+            };
+            const appConfig = {
+                components: {
+                    "portry": configSearch
+                },
+                data() {
+                    return {
+                        cityData: [
+                            ["杭州", "苏州"],
+                            ["北京", "济南"],
+                            ["长沙", "江陵"],
+                            ["广州", "桂林"],
+                            ["成都", "西安"]
+                        ],
+                        cityList: [],
+                        areaList: ["华东地区", "华北地区", "华中地区", "华南地区", "华西地区"]
+                    }
+                },
+                methods: {
+                    handleArea: function (index) {
+                        this.cityList = this.cityData[index]
+                    },
+                    handleInit() {
+                        this.cityList = this.cityData[0];
+                    }
+                },
+                mounted() {
+                    this.handleInit();
+                }
+            };
+            const app = Vue.createApp(appConfig);
+            app.mount("#app");
+        </script>
+    </body>
+</html>

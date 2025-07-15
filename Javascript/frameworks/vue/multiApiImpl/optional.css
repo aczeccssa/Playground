@@ -1,0 +1,99 @@
+.main {
+    width: 100%;
+    background-image: url(img/graybg.jpg);
+}
+.wrap {
+    width: 1000px;
+    margin: 0 auto;
+}
+.left {
+    padding-top: 30px;
+    width: 200px;
+    height: 600px;
+    float: left;
+    border-right: #A48652 1px solid;
+}
+.right {
+
+    width: 780px;
+    height: 600px;
+    float: right;
+}
+/* 左列按钮*/
+.left h4 {
+    line-height: 60px;
+    text-align: center;
+    font-size: 1.2em;
+}
+.left ul li a, .left ul li a:link, .left ul li a:visited {
+    display: block;
+    width: 200px;
+    height: 50px;
+    background-color: #a48652;
+    color: #fff;
+    text-align: center;
+    text-decoration: none;
+    line-height: 50px;
+    font-size: 1.0em;
+}
+.left ul li a:hover {
+    background-color: #fff;
+    color: #a48652;
+}
+
+.right {
+    width: 780px;
+    border: none;
+    height: 500px;
+}
+.content {
+    margin: 50px auto;
+    width: 720px;
+    border: #8E6310 1px solid;
+    padding: 10px;
+    height: 100px;
+}
+.content h4 {
+    margin: 20px;
+}
+.content ul {
+    width: 350px;
+    float: right;
+    margin: auto;
+    padding: 20px 100px;
+}
+.content ul li {
+    float: left;
+    margin: 0 15px 0 10px;
+}
+.content ul li:hover {
+    float: left;
+    margin: 0 15px 0 10px;
+    cursor: pointer;
+    color: #8E6310;
+    font-weight: 600;
+}
+.poetry {
+    margin: auto;
+    padding: 20px 20px;
+}
+
+/*email列表过渡效果*/
+.emailFade-enter-from,
+.emailFade-leave-to {
+    opacity: 0;
+    transform: translateX(520px);
+}
+.emailFade-enter-active,
+.emailFade-leave-active {
+    transition: opacity 4s;
+}
+/*组件切换过渡效果*/
+.accountFade-enter-from,
+.accountFade-leave-to {
+    opacity: 0;
+}
+.accountFade-enter-active,
+.accountFade-leave-active {
+    transition: opacity 1s;
+}
